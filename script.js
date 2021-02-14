@@ -29,6 +29,7 @@ new Vue({
 
       this.startGame()
     },
+
     startGame: function() {
       this.whoStartsPlaying()
       this.boardVisibility = "visible"
@@ -55,6 +56,36 @@ new Vue({
     play: function(cell) {
       if (this.board[cell] == "") {
         this.board[cell] = `/assets/${this.playerDot}.svg`
+        console.log(this.isAWinningPlay(cell))
+
+      }
+    },
+
+    getEmptyCells: function() {
+      emptyKeys = []
+      keys = Object.keys(this.board)
+      for (key in keys) {
+        if (this.board[key] == "") {
+          emptyKeys.push(key)
+        }
+      }
+      return emptyKeys
+    },
+
+    isAWinningPlay: function(cell) {
+      if(
+        (this.board["cell_1a"] == this.board["cell_2a"] && this.board["cell_2a"] == this.board["cell_3a"] && this.board["cell_3a"] == this.board[cell]) ||
+        (this.board["cell_1b"] == this.board["cell_2b"] && this.board["cell_2b"] == this.board["cell_3b"] && this.board["cell_3b"] == this.board[cell]) ||
+        (this.board["cell_1c"] == this.board["cell_2c"] && this.board["cell_2c"] == this.board["cell_3c"] && this.board["cell_3c"] == this.board[cell]) ||
+        (this.board["cell_1a"] == this.board["cell_1b"] && this.board["cell_1b"] == this.board["cell_1c"] && this.board["cell_1c"] == this.board[cell]) ||
+        (this.board["cell_2a"] == this.board["cell_2b"] && this.board["cell_2b"] == this.board["cell_2c"] && this.board["cell_2c"] == this.board[cell]) ||
+        (this.board["cell_3a"] == this.board["cell_3b"] && this.board["cell_3b"] == this.board["cell_3c"] && this.board["cell_3c"] == this.board[cell]) ||
+        (this.board["cell_1a"] == this.board["cell_2b"] && this.board["cell_2b"] == this.board["cell_3c"] && this.board["cell_3c"] == this.board[cell]) ||
+        (this.board["cell_1c"] == this.board["cell_2b"] && this.board["cell_2b"] == this.board["cell_3a"] && this.board["cell_3a"] == this.board[cell])
+      ) {
+        return true
+      } else {
+        return false
       }
     }
 	}

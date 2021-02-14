@@ -1,0 +1,65 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width:100vw;
+  height:100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#app {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+p, h1 {
+  font-size: 300%;
+  background:transparent;
+  margin: 30px 50px;
+}
+
+h1 {
+  padding: 50px;
+}
+
+.options{
+  height:100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.options img {
+  height: 80px;
+  cursor: pointer;
+}
+
+.options .x img {
+  height: 110px;
+}
+
+table{
+  position: absolute;
+  background: url("./assets/board.svg") no-repeat;
+  background-size: cover;
+  visibility: hidden;
+}
+
+td {
+  width: 60px;
+  height: 60px;
+}
+
+td img {
+  width: 50px;
+  margin-top: 5px;
+  margin-left: 3px;
+}

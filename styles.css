@@ -50,12 +50,12 @@ table{
   position: absolute;
   background: url("./assets/board.svg") no-repeat;
   background-size: cover;
-  visibility: hidden;
 }
 
 td {
   width: 60px;
   height: 60px;
+  cursor: pointer;
 }
 
 td img {

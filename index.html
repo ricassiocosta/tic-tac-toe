@@ -10,30 +10,50 @@
 <body>
   <h1>Jogo da Velha</h1>
   <div id="app">
-    <table>
+    <table v-bind:style="{visibility: boardVisibility}">
       <tr>
-        <td class="cell" id="0"></td>
-        <td class="cell" id="1"></td>
-        <td class="cell" id="2"></td>
+        <td @click="play('cell_1a')">
+          <img :src="cell_1a">
+        </td>
+        <td @click="play('cell_2a')">
+          <img :src="cell_2a">
+        </td>
+        <td @click="play('cell_3a')">
+          <img :src="cell_3a">
+        </td>
       </tr>
       <tr>
-        <td class="cell" id="3"></td>
-        <td class="cell" id="4"></td>
-        <td class="cell" id="5"></td>
+        <td @click="play('cell_1b')">
+          <img :src="cell_1b">
+        </td>
+        <td @click="play('cell_2b')">
+          <img :src="cell_2b">
+        </td>
+        <td @click="play('cell_3b')">
+          <img :src="cell_3b">
+        </td>
       </tr>
       <tr>
-        <td class="cell" id="6"></td>
-        <td class="cell" id="7"></td>
-        <td class="cell" id="8"></td>
+        <td @click="play('cell_1c')">
+          <img :src="cell_1c">
+        </td>
+        <td @click="play('cell_2c')">
+          <img :src="cell_2c">
+        </td>
+        <td @click="play('cell_3c')">
+          <img :src="cell_3c">
+        </td>
       </tr>
     </table>
-    <p>Escolha:</p>
-    <div class="options">
-      <div class="circle">
-        <img src="./assets/circle.svg" alt="circle">
-      </div>
-      <div class="x">
-        <img src="./assets/x.svg" alt="x">
+    <div class="menu" v-bind:style="{visibility: menuVisibility}">
+      <p>Escolha:</p>
+      <div class="options">
+        <div class="circle" @click="setPlayerDot('circle')">
+          <img src="./assets/circle.svg" alt="circle">
+        </div>
+        <div class="x" @click="setPlayerDot('x')">
+          <img src="./assets/x.svg" alt="x">
+        </div>
       </div>
     </div>
   </div>

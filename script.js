@@ -92,57 +92,57 @@ new Vue({
     },
 
     thinkOnNextMove: function(vBoard, player) {
-      let emptyCells = this.getEmptyCells(vBoard);
+      let emptyCells = this.getEmptyCells(vBoard)
       if (this.winner(vBoard, this.playerDot)) {
         return {
-          score: -10
-        };
+          score: -1
+        }
       } else if (this.winner(vBoard, this.aiDot)) {
         return {
-          score: 10
-        };
+          score: 1
+        }
       } else if (emptyCells.length === 0) {
         return {
           score: 0
-        };
+        }
       }
 
-      let moves = [];
+      let moves = []
       for (let i = 0; i < emptyCells.length; i++) {
-        let move = {};
-        move.index = vBoard[emptyCells[i]];
-        vBoard[emptyCells[i]] = player;
+        let move = {}
+        move.index = vBoard[emptyCells[i]]
+        vBoard[emptyCells[i]] = player
 
         if (player == this.aiDot) {
-          let result = this.thinkOnNextMove(vBoard, this.playerDot);
-          move.score = result.score;
+          let result = this.thinkOnNextMove(vBoard, this.playerDot)
+          move.score = result.score
         } else {
-          let result = this.thinkOnNextMove(vBoard, this.aiDot);
-          move.score = result.score;
+          let result = this.thinkOnNextMove(vBoard, this.aiDot)
+          move.score = result.score
         }
-        vBoard[emptyCells[i]] = move.index;
-        moves.push(move);
+        vBoard[emptyCells[i]] = move.index
+        moves.push(move)
       }
 
-      let bestMove;
+      let bestMove
       if (player === this.aiDot) {
-        let bestScore = -1000;
+        let bestScore = -1000
         for (let i = 0; i < moves.length; i++) {
           if (moves[i].score > bestScore) {
-            bestScore = moves[i].score;
-            bestMove = i;
+            bestScore = moves[i].score
+            bestMove = i
           }
         }
       } else {
-        let bestScore = 1000;
+        let bestScore = 1000
         for (let i = 0; i < moves.length; i++) {
           if (moves[i].score < bestScore) {
-            bestScore = moves[i].score;
-            bestMove = i;
+            bestScore = moves[i].score
+            bestMove = i
           }
         }
       }
-      return moves[bestMove];
+      return moves[bestMove]
     },
 
     winner: function(board, player) {

@@ -92,7 +92,7 @@ new Vue({
     },
 
     thinkOnNextMove: function(vBoard, player) {
-      let array = this.getEmptyCells(vBoard);
+      let emptyCells = this.getEmptyCells(vBoard);
       if (this.winner(vBoard, this.playerDot)) {
         return {
           score: -10
@@ -101,41 +101,41 @@ new Vue({
         return {
           score: 10
         };
-      } else if (array.length === 0) {
+      } else if (emptyCells.length === 0) {
         return {
           score: 0
         };
       }
 
-      var moves = [];
-      for (var i = 0; i < array.length; i++) {
-        var move = {};
-        move.index = vBoard[array[i]];
-        vBoard[array[i]] = player;
+      let moves = [];
+      for (let i = 0; i < emptyCells.length; i++) {
+        let move = {};
+        move.index = vBoard[emptyCells[i]];
+        vBoard[emptyCells[i]] = player;
 
         if (player == this.aiDot) {
-          var g = this.thinkOnNextMove(vBoard, this.playerDot);
-          move.score = g.score;
+          let result = this.thinkOnNextMove(vBoard, this.playerDot);
+          move.score = result.score;
         } else {
-          var g = this.thinkOnNextMove(vBoard, this.aiDot);
-          move.score = g.score;
+          let result = this.thinkOnNextMove(vBoard, this.aiDot);
+          move.score = result.score;
         }
-        vBoard[array[i]] = move.index;
+        vBoard[emptyCells[i]] = move.index;
         moves.push(move);
       }
 
-      var bestMove;
+      let bestMove;
       if (player === this.aiDot) {
-        var bestScore = -10000;
-        for (var i = 0; i < moves.length; i++) {
+        let bestScore = -1000;
+        for (let i = 0; i < moves.length; i++) {
           if (moves[i].score > bestScore) {
             bestScore = moves[i].score;
             bestMove = i;
           }
         }
       } else {
-        var bestScore = 10000;
-        for (var i = 0; i < moves.length; i++) {
+        let bestScore = 1000;
+        for (let i = 0; i < moves.length; i++) {
           if (moves[i].score < bestScore) {
             bestScore = moves[i].score;
             bestMove = i;

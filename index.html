@@ -13,46 +13,46 @@
     <div class="menu" v-bind:style="{visibility: menuVisibility}">
       <h2>Escolha:</h2>
       <div class="options">
-        <div class="circle" @click="setPlayerDot('circle')">
-          <img src="./assets/circle.svg" alt="circle">
+        <div class="circle" @click="setPlayerDot('O')">
+          <img src="./assets/O.svg" alt="circle">
         </div>
-        <div class="x" @click="setPlayerDot('x')">
-          <img src="./assets/x.svg" alt="x">
+        <div class="x" @click="setPlayerDot('X')">
+          <img src="./assets/X.svg" alt="x">
         </div>
       </div>
     </div>
     <table v-bind:style="{visibility: boardVisibility}">
       <tr>
-        <td @click="play('cell_1a')">
-          <img :src="board.cell_1a">
+        <td @click="play('cell_1a', 0)">
+          <img :src="imageBoard.cell_1a">
         </td>
-        <td @click="play('cell_2a')">
-          <img :src="board.cell_2a">
+        <td @click="play('cell_2a', 1)">
+          <img :src="imageBoard.cell_2a">
         </td>
-        <td @click="play('cell_3a')">
-          <img :src="board.cell_3a">
-        </td>
-      </tr>
-      <tr>
-        <td @click="play('cell_1b')">
-          <img :src="board.cell_1b">
-        </td>
-        <td @click="play('cell_2b')">
-          <img :src="board.cell_2b">
-        </td>
-        <td @click="play('cell_3b')">
-          <img :src="board.cell_3b">
+        <td @click="play('cell_3a', 2)">
+          <img :src="imageBoard.cell_3a">
         </td>
       </tr>
       <tr>
-        <td @click="play('cell_1c')">
-          <img :src="board.cell_1c">
+        <td @click="play('cell_1b', 3)">
+          <img :src="imageBoard.cell_1b">
         </td>
-        <td @click="play('cell_2c')">
-          <img :src="board.cell_2c">
+        <td @click="play('cell_2b', 4)">
+          <img :src="imageBoard.cell_2b">
         </td>
-        <td @click="play('cell_3c')">
-          <img :src="board.cell_3c">
+        <td @click="play('cell_3b', 5)">
+          <img :src="imageBoard.cell_3b">
+        </td>
+      </tr>
+      <tr>
+        <td @click="play('cell_1c', 6)">
+          <img :src="imageBoard.cell_1c">
+        </td>
+        <td @click="play('cell_2c', 7)">
+          <img :src="imageBoard.cell_2c">
+        </td>
+        <td @click="play('cell_3c', 8)">
+          <img :src="imageBoard.cell_3c">
         </td>
       </tr>
     </table>

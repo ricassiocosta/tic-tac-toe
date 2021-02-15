@@ -6,7 +6,8 @@ new Vue({
     playTime: "",
     menuVisibility: "",
     boardVisibility: "hidden",
-    board: {
+    board: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    imageBoard: {
       cell_1a: "",
       cell_2a: "",
       cell_3a: "",
@@ -21,10 +22,10 @@ new Vue({
 	methods: {
     setPlayerDot: function(dot) {
       this.playerDot = dot
-      if (this.playerDot == 'x') {
-        this.aiDot = 'circle'
+      if (this.playerDot == 'X') {
+        this.aiDot = 'O'
       } else {
-        this.aiDot = 'x'
+        this.aiDot = 'X'
       }
 
       this.startGame()
@@ -48,107 +49,112 @@ new Vue({
     },
 
     aiFirstMove: function() {
-      keys = Object.keys(this.board)
-      randomCell = keys[Math.floor(Math.random() * keys.length)]
-      this.board[randomCell] = `./assets/${this.aiDot}.svg`
+      let keys = Object.keys(this.imageBoard)
+      randomNumber = Math.floor(Math.random() * keys.length)
+      this.board[randomNumber] = this.aiDot
+      this.imageBoard[keys[randomNumber]] = `./assets/${this.aiDot}.svg`
     },
 
-    play: function(cell) {
-      if (this.board[cell] == "") {
-        this.board[cell] = `./assets/${this.playerDot}.svg`
-        if(this.isAWinningPlay(this.board, cell)) {
-          alert("Parabéns! Você venceu ;D")
-          window.location.reload()
-        } else {
-          playTime = "ai"
-          this.nextRound()
-        }
+    play: function(cell, index) {
+      if (this.imageBoard[cell] == "") {
+        this.board[index] = this.playerDot
+        this.imageBoard[cell] = `./assets/${this.playerDot}.svg`
+        this.nextRound()
       }
     },
 
     nextRound: function() {
-      move = this.thinkOnNextMove(this.board, this.playTime)
-      console.log(move)
-      /*
-      this.board[move.cell] = `/assets/${this.aiDot}.svg`
-      if(this.isAWinningPlay(this.board, cell)) {
-        alert("Eita! Você perdeu x.x")
+      if(this.getEmptyCells(this.board) == 0) {
+        alert("Deu VELHA!")
         window.location.reload()
       }
-      */
+      player = this.aiDot
+      move = this.thinkOnNextMove(this.board, player)
+      this.aiPlay(move.index)
     },
 
-    thinkOnNextMove: function(vBoard, playTime) {
-      emptyCells = this.getEmptyCells(vBoard)
-      if (emptyCells.length == 0) {
-        return {score: 0}
+    aiPlay: function(index) {
+      let keys = Object.keys(this.imageBoard)
+      this.board[index] = this.aiDot
+      this.imageBoard[keys[index]] = `./assets/${this.aiDot}.svg`
+      if(this.winner(this.board, this.aiDot)) {
+        setTimeout(() => {
+          alert("Eita! você perdeu x.x")
+          window.location.reload()
+        }, 300)
       }
-    
-      moves = []
-      var bestMove
-      if (playTime == "ai") {
-        dot = `/assets/${this.aiDot}.svg`
-        for (cell in emptyCells) {
-          move = {}
-          move.index = vBoard[emptyCells[cell]]
-          vBoard[emptyCells[cell]] = dot
-          if (this.isAWinningPlay(vBoard, cell)){
-              return {score: 1}
-          } else {
-            playTime = "player"
-            result = this.thinkOnNextMove(vBoard, playTime)
-            move.score = result.score
-            vBoard[emptyCells[cell]] = move.index
-            moves.push(move)
+      if(this.getEmptyCells(this.board) == 0) {
+        setTimeout(() => {
+          alert("Deu VELHA!")
+          window.location.reload()
+        }, 300)
+      }
+    },
+
+    thinkOnNextMove: function(vBoard, player) {
+      let array = this.getEmptyCells(vBoard);
+      if (this.winner(vBoard, this.playerDot)) {
+        return {
+          score: -10
+        };
+      } else if (this.winner(vBoard, this.aiDot)) {
+        return {
+          score: 10
+        };
+      } else if (array.length === 0) {
+        return {
+          score: 0
+        };
+      }
+
+      var moves = [];
+      for (var i = 0; i < array.length; i++) {
+        var move = {};
+        move.index = vBoard[array[i]];
+        vBoard[array[i]] = player;
+
+        if (player == this.aiDot) {
+          var g = this.thinkOnNextMove(vBoard, this.playerDot);
+          move.score = g.score;
+        } else {
+          var g = this.thinkOnNextMove(vBoard, this.aiDot);
+          move.score = g.score;
+        }
+        vBoard[array[i]] = move.index;
+        moves.push(move);
+      }
+
+      var bestMove;
+      if (player === this.aiDot) {
+        var bestScore = -10000;
+        for (var i = 0; i < moves.length; i++) {
+          if (moves[i].score > bestScore) {
+            bestScore = moves[i].score;
+            bestMove = i;
           }
         }
-    
-        bestScore = -10000
-        for (move in moves) {
-          if(move.score > bestScore) {
-            bestMove = move
-          }
-        }
-    
       } else {
-        dot = `/assets/${this.playerDot}.svg`
-        for (cell in emptyCells) {
-          move = {}
-          move.index = vBoard[emptyCells[cell]]
-    
-          vBoard[emptyCells[cell]] = dot
-          if (this.isAWinningPlay(vBoard, cell)){
-              return {score: -1}
-          } else {
-            playTime = "ai"
-            result = this.thinkOnNextMove(vBoard, playTime)
-            move.score = result.score
-            vBoard[emptyCells[cell]] = move.index
-            moves.push(move)
-          }
-        }
-    
-        bestScore = 10000
-        for (move in moves) {
-          if(move.score < bestScore) {
-            bestMove = move
+        var bestScore = 10000;
+        for (var i = 0; i < moves.length; i++) {
+          if (moves[i].score < bestScore) {
+            bestScore = moves[i].score;
+            bestMove = i;
           }
         }
       }
-      
-      return bestMove
+      return moves[bestMove];
     },
 
-    isAWinningPlay: function(board, cell) {
-      if(
-        (board["cell_1a"] == board["cell_2a"] && board["cell_2a"] == board["cell_3a"] && board["cell_3a"] == board[cell]) ||
-        (board["cell_1b"] == board["cell_2b"] && board["cell_2b"] == board["cell_3b"] && board["cell_3b"] == board[cell]) ||
-        (board["cell_1c"] == board["cell_2c"] && board["cell_2c"] == board["cell_3c"] && board["cell_3c"] == board[cell]) ||
-        (board["cell_1a"] == board["cell_1b"] && board["cell_1b"] == board["cell_1c"] && board["cell_1c"] == board[cell]) ||
-        (board["cell_2a"] == board["cell_2b"] && board["cell_2b"] == board["cell_2c"] && board["cell_2c"] == board[cell]) ||
-        (board["cell_3a"] == board["cell_3b"] && board["cell_3b"] == board["cell_3c"] && board["cell_3c"] == board[cell]) ||
-        (board["cell_1a"] == board["cell_2b"] && board["cell_2b"] == board["cell_3c"] && board["cell_3c"] == board[cell]) ||
-        (board["cell_1c"] == board["cell_2b"] && board["cell_2b"] == board["cell_3a"] && board["cell_3a"] == board[cell])
+    winner: function(board, player) {
+      if (
+        (board[0] == player && board[1] == player && board[2] == player) ||
+        (board[3] == player && board[4] == player && board[5] == player) ||
+        (board[6] == player && board[7] == player && board[8] == player) ||
+        (board[0] == player && board[3] == player && board[6] == player) ||
+        (board[1] == player && board[4] == player && board[7] == player) ||
+        (board[2] == player && board[5] == player && board[8] == player) ||
+        (board[0] == player && board[4] == player && board[8] == player) ||
+        (board[2] == player && board[4] == player && board[6] == player)
       ) {
         return true
       } else {
@@ -157,14 +163,7 @@ new Vue({
     },
 
     getEmptyCells: function(board) {
-      emptyCells = []
-      keys = Object.keys(board)
-      for (key in keys) {
-        if (board[keys[key]] == "") {
-          emptyCells.push(keys[key])
-        }
-      }
-      return emptyCells
+      return  board.filter(s => s != "O" && s != "X");
     }
 	}
 })

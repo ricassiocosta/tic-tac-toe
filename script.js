@@ -10,15 +10,15 @@ new Vue({
     board: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     // imageBoard is the board used to show the game
     imageBoard: {
-      cell_1a: "",
-      cell_2a: "",
-      cell_3a: "",
-      cell_1b: "",
-      cell_2b: "",
-      cell_3b: "",
-      cell_1c: "",
-      cell_2c: "",
-      cell_3c: "",
+      cell_1a: { index: 0, dot: "" },
+      cell_2a: { index: 1, dot: "" },
+      cell_3a: { index: 2, dot: "" },
+      cell_1b: { index: 3, dot: "" },
+      cell_2b: { index: 4, dot: "" },
+      cell_3b: { index: 5, dot: "" },
+      cell_1c: { index: 6, dot: "" },
+      cell_2c: { index: 7, dot: "" },
+      cell_3c: { index: 8, dot: "" },
     }
   },
 	methods: {
@@ -61,14 +61,15 @@ new Vue({
       let keys = Object.keys(this.imageBoard)
       randomNumber = Math.floor(Math.random() * keys.length)
       this.board[randomNumber] = this.aiDot
-      this.imageBoard[keys[randomNumber]] = `./assets/${this.aiDot}.svg`
+      this.imageBoard[keys[randomNumber]].dot = `./assets/${this.aiDot}.svg`
     },
 
     // play is called when player plays
-    play: function(cell, index) {
-      if (this.imageBoard[cell] == "") {
+    play: function(cell) {
+      if (this.imageBoard[cell].dot == "") {
+        let index = this.imageBoard[cell].index
         this.board[index] = this.playerDot
-        this.imageBoard[cell] = `./assets/${this.playerDot}.svg`
+        this.imageBoard[cell].dot = `./assets/${this.playerDot}.svg`
         this.nextRound()
       }
     },
@@ -91,7 +92,7 @@ new Vue({
     aiPlay: function(index) {
       let keys = Object.keys(this.imageBoard)
       this.board[index] = this.aiDot
-      this.imageBoard[keys[index]] = `./assets/${this.aiDot}.svg`
+      this.imageBoard[keys[index]].dot = `./assets/${this.aiDot}.svg`
       // check if this movement will won the game
       if(this.checkWin(this.board, this.aiDot)) {
         setTimeout(() => {
